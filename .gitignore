@@ -1,0 +1,9 @@
+build*	
+devel	
+install	
+*.pyc
+.browse.VC.db
+browse.VC.db	
+*.user	
+*.pic
+*.vscode

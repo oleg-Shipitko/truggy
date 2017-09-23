@@ -1,2 +1,0 @@
-
--DCATKIN_DEVEL_PREFIX=/home/oleg_shipitko/truggy/devel -DCMAKE_INSTALL_PREFIX=/home/oleg_shipitko/truggy/install -G Unix Makefiles
