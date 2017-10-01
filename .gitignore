@@ -1,6 +1,7 @@
 build/
 devel/
 bin/
+articles/
 lib/
 msg_gen/
 srv_gen/
