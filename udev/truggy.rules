@@ -1,0 +1,1 @@
+SUBSYSTEM=="tty", KERNEL=="ttyACM[0-9]*", ATTRS{manufacturer}=="Arduino (www.arduino.cc)", ATTRS{serial}=="7413633393235130B051", ATTRS{idProduct}=="0043",  MODE="0666", SYMLINK+="truggy_arduino"
