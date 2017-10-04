@@ -16,12 +16,12 @@ class CascadeClassifier(object):
         self.pub_topic = rospy.get_param('~pub_topic', '')
         self.sub_topic = rospy.get_param('~sub_ropic', '/cv_camera/image_raw')
         self.cascade_xml = rospy.get_param('~cascade_xml', '')
-        
+
         if self.sub_topic and self.pub_topic: 
             self.img_sub = rospy.Subscriber(self.sub_topic, Image, self.image_callback)
-            self.detect_pub = rospy.Publisher(self.pub_topic, Bool)
+            self.detect_pub = rospy.Publisher(self.pub_topic, Bool, queue_size=10)
         else:
-            rospy.logerr("Topics for subscription and publishing" + 
+            rospy.logerr("Topics for subscription and publishing " + 
                          "were not specified:\n %s\n %s", 
                          self.sub_topic,
                          self.pub_topic)
@@ -45,20 +45,18 @@ class CascadeClassifier(object):
         gray_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
         signs = self.cascade.detectMultiScale(gray_img, 1.2, 3)
 
-        if signs:
-            sign_detected = Bool()
-            sign_detected.data = True
-            self.detect_pub.publish(sign_detected)
+        if len(signs) > 0:
+            self.detect_pub.publish(data = True)
 
         for (x,y,w,h) in signs:
             cv2.rectangle(cv_img,(x,y),(x+w,y+h),(255,0,0),2)
 
-        cv2.imshow('img',cv_img)
-        cv2.waitKey(3)
+        # cv2.imshow('Right_turn_detection',cv_img)
+        # cv2.waitKey(3)
     
 def main(args):
-    cascade_classifier = CascadeClassifier()
     rospy.init_node('cascade_classifier')
+    cascade_classifier = CascadeClassifier()
     try:
         rospy.spin()
     except KeyboardInterrupt:
@@ -67,3 +65,4 @@ def main(args):
 
 if __name__ == '__main__':
     main(sys.argv)
+    
