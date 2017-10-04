@@ -15,8 +15,8 @@ class LaneDetector(object):
     def __init__(self):
         self.bridge = CvBridge()
         self.img_sub = rospy.Subscriber("/cv_camera/image_raw", Image, self.image_callback)
-        self.canny_low = rospy.get_param('canny_low', 25)
-        self.canny_high = rospy.get_param('canny_high', 75)
+        self.canny_low = rospy.get_param('~canny_low', 25)
+        self.canny_high = rospy.get_param('~canny_high', 75)
 
 
     def image_callback(self, ros_img):
@@ -40,7 +40,7 @@ class LaneDetector(object):
         img_edges = cv2.Canny(img_blurred, self.canny_low, self.canny_high)
         # cv2.imshow("Edges", img_edges)
         img_edges_roi = self.select_region(img_edges)
-        cv2.imshow("Edges roi", img_edges_roi)
+        # cv2.imshow("Edges roi", img_edges_roi)
         lines = cv2.HoughLinesP(img_edges_roi, 1, 3.14/180, 20,  minLineLength=100, maxLineGap=30)
         if lines is None:
             rospy.logwarn("Lines were not found, skipping image")
@@ -108,8 +108,8 @@ class LaneDetector(object):
         # add more weight to longer lines    
         left_lane  = np.dot(left_weights,  left_lines) /np.sum(left_weights)  if len(left_weights) > 0 else None
         right_lane = np.dot(right_weights, right_lines)/np.sum(right_weights) if len(right_weights) > 0 else None
-        rospy.loginfo("%s", left_lane)
-        rospy.loginfo("%s", right_lane)
+        # rospy.loginfo("%s", left_lane)
+        # rospy.loginfo("%s", right_lane)
         return left_lane, right_lane
     
     def draw_lanes(self, image, left_lane, right_lane):
